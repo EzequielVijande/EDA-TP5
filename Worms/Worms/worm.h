@@ -1,6 +1,8 @@
 #ifndef WORM_H
 #define WORM_H
 
+/// We assume frame counts increments each 20 ms
+
 struct Pos {
 	double x, y;
 };
@@ -10,6 +12,7 @@ struct Physics {
 	float gravity;
 	float angle;
 	Pos max_coordinates , min_coordinates;
+
 };
 
 class Worm {

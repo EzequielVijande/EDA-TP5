@@ -16,6 +16,7 @@ void Worm::start_moving(int sentido) {
 	if (this->state == IDLE) {
 		this->state = MONITOR_MOVING;
 		this->sentido = sentido;
+		this->frame_count = 0;
 	}else if (this->state = END_MOVEMENT) {
 		this->state = MOVING;
 	}else {
@@ -34,6 +35,7 @@ void Worm::stop_moving() {
 void Worm::start_jumping() {
 	if (this->state == IDLE) {
 		this->state = JUMPING;
+		this->frame_count = 0;
 	}else {
 		this->error = 1;
 	}
@@ -41,12 +43,24 @@ void Worm::start_jumping() {
 void Worm::stop_jumping() {
 	if (this->state == JUMPING) {
 		this->state = IDLE;
-	}
-	else {
+	}else {
 		this->error = 1;
 	}
 }
 
 void Worm::update() {
-	switch (this->state)
+	switch (this->state) {
+		case MONITOR_MOVING:
+			if (this->frame_count >= 5) {
+
+			}else {
+				
+			}
+		break;
+		case MOVING:
+		break;
+		case JUMPING:
+		break;
+	}
+	this->frame_count++;
 }
