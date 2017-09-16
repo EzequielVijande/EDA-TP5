@@ -45,7 +45,7 @@ bool viewer::IsInitOK(void)
 	return init;
 }
 
-void viewer::UpdateDisplay(worm* worms, unsigned int worm_count)
+void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 {
 	ALLEGRO_BITMAP* current_target = al_get_target_bitmap(); //guarda el target actual para no perderlo.
 
@@ -117,8 +117,6 @@ bool viewer::InitializeResources(char* b_image, char** worm_jumps, char** worm_w
 		}
 	}
 
-
-	
 	return true;
 
 }
@@ -141,13 +139,13 @@ ALLEGRO_BITMAP * load_image_at_size(char* image_name, int size_x, int size_y)
 	current_target = al_get_target_bitmap(); //salva el target original para no perderlo
 
 	image = al_load_bitmap(image_name);
-	if (image == nullptr)
+	if (image == NULL)
 	{
 		return nullptr;
 	}
 
 	resized_image = al_create_bitmap(size_x, size_y);
-	if (resized_image == nullptr)
+	if (resized_image == NULL)
 	{
 		al_destroy_bitmap(image);
 		return nullptr;

@@ -62,7 +62,7 @@ private:
 
 	unsigned int height;
 	unsigned int width;
-	ALLEGRO_DISPLAY * display;
+	ALLEGRO_DISPLAY* display;
 	ALLEGRO_BITMAP* background;
 	ALLEGRO_BITMAP* worm_jump[J_FRAMES]; //guarda los bitmaps con las imagenes correspondientes al salto
 	ALLEGRO_BITMAP* worm_walk[W_FRAMES]; //guarda los bitmaps con las imagenes correspondientes al desplazamiento en tierra.
