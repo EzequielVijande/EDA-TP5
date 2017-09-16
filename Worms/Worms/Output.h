@@ -11,7 +11,7 @@
 #include "worm.h"
 
 #define WORM_SIZE 40
-#define UNIT 10
+#define UNIT 1
 #define J_FRAMES 10
 #define W_FRAMES 15
 
@@ -68,6 +68,8 @@ private:
 	ALLEGRO_BITMAP* worm_walk[W_FRAMES]; //guarda los bitmaps con las imagenes correspondientes al desplazamiento en tierra.
 	bool init; //indica si hubo o no error en la inicializacion.
 	bool InitializeResources(char* image, char** worm_jumps,  char** worm_walks);
+	void PrintMove(Worm& worm, int secuence, int sense); //Actualiza la representacion del worm moviendose.
+	void PrintJump(Worm& worm, int secuence, int sense); //Actualiza la representacion del worm saltando.
 
 };
 

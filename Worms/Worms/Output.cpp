@@ -1,8 +1,11 @@
 #include "output.h"
 
+#define IDLE_FRAME 3
+
 bool InitializeAllegroOutput(void);
 //Inicializa los  addons necesarios de allegro para
 //utilizar el modulo de output.
+
 
 
 ALLEGRO_BITMAP * load_image_at_size(char* image_name, int size_x, int size_y);
@@ -51,12 +54,47 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 
 	al_set_target_backbuffer(display);
 	al_draw_bitmap(background, 0.0, 0.0, 0);
-	unsigned int offset = 0;
-	double direction = 0.0;
+	int state = 0; 
+	int facing = 0; //Sentido en el que mira el gusano.
+	int secuence = 0; //indica en que frame de la accion se encuentra el worm
 	for (unsigned int i = 0; i < worm_count; i++)
 	{
-		
+		state = ((worms+i)->GetState());
+		facing = ((worms + i)->GetSense());
+		secuence = ((worms + i)->GetSecuence());
+		switch (state)
+		{
+		case MOVING:
+			PrintMove(worms[i], secuence, facing);
+			break;
 
+		case JUMPING:
+
+			PrintJump(worms[i], secuence, facing);
+			break;
+
+		case MONITOR_MOVING:
+
+			PrintMove(worms[i], IDLE_FRAME, facing);
+			break;
+
+		case MONITOR_JUMPING:
+
+			PrintMove(worms[i], IDLE_FRAME, facing);
+			break;
+
+		case IDLE:
+
+			PrintMove(worms[i], IDLE_FRAME, facing);
+			break;
+
+		default: //En caso de recibir algun state desconocido lo trata com si fuera IDLE.
+
+			PrintMove(worms[i], IDLE_FRAME, facing);
+			break;
+
+
+		}
 	}
 
 	al_set_target_bitmap(current_target);
@@ -130,7 +168,7 @@ void destroy_images(ALLEGRO_BITMAP  **imagen, unsigned int num_imagenes)
 	}
 }
 
-ALLEGRO_BITMAP * load_image_at_size(char* image_name, int size_x, int size_y)
+ALLEGRO_BITMAP* load_image_at_size(char* image_name, int size_x, int size_y)
 {
 	ALLEGRO_BITMAP * image = nullptr;
 	ALLEGRO_BITMAP * current_target = nullptr;
@@ -160,4 +198,28 @@ ALLEGRO_BITMAP * load_image_at_size(char* image_name, int size_x, int size_y)
 	al_set_target_bitmap(current_target); //vuelve al target original
 	al_destroy_bitmap(image);
 	return resized_image;
+}
+
+void viewer:: PrintMove(Worm& worm, int secuence, int sense)
+{
+	if (sense == RIGHT)
+	{
+		al_draw_bitmap(worm_walk[secuence], (worm.GetPosX()), (worm.GetPosY()), ALLEGRO_FLIP_HORIZONTAL);
+	}
+	else
+	{
+		al_draw_bitmap(worm_walk[secuence], (worm.GetPosX()), (worm.GetPosY()), 0);
+	}
+}
+
+void viewer:: PrintJump(Worm& worm, int secuence, int sense)
+{
+	if (sense == RIGHT)
+	{
+		al_draw_bitmap(worm_jump[secuence], (worm.GetPosX()), (worm.GetPosY()), ALLEGRO_FLIP_HORIZONTAL);
+	}
+	else
+	{
+		al_draw_bitmap(worm_jump[secuence], (worm.GetPosX()), (worm.GetPosY()), 0);
+	}
 }

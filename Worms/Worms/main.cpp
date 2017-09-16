@@ -13,7 +13,7 @@ int main(void)
 		return -1;
 	}
 
-	viewer view(70, 100);
+	viewer view(1200, 1080);
 	if (view.IsInitOK())
 	{
 		al_flip_display();
