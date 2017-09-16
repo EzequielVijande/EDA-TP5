@@ -1,4 +1,6 @@
-#include "worm.h"
+#ifndef WORM_H
+#define WORM_H
+
 
 class Worm {
 	private:
@@ -8,3 +10,5 @@ class Worm {
 		int state;
 	
 };
+
+#endif //WORM_H
