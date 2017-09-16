@@ -1,11 +1,12 @@
 #include "worm.h"
+#include "config.h"
 
 enum {IDLE , MONITOR_MOVING , MOVING , END_MOVEMENT , JUMPING };
 
 Worm::Worm(double _x, double _y, int _sentido,Physics physics) {
 	frame_count = 0;
-	this->x = _x;
-	this->y = _y;
+	this->pos.x = _x;
+	this->pos.y = _y;
 	this->sentido = _sentido;
 	this->state = IDLE;
 	this->physics = physics;
@@ -13,6 +14,11 @@ Worm::Worm(double _x, double _y, int _sentido,Physics physics) {
 }
 
 void Worm::start_moving(int sentido) {
+	if (sentido == -1 || sentido == 1) {
+		this->error = 1; // this makes no sense
+		return; 
+	}
+
 	if (this->state == IDLE) {
 		this->state = MONITOR_MOVING;
 		this->sentido = sentido;
@@ -52,15 +58,39 @@ void Worm::update() {
 	switch (this->state) {
 		case MONITOR_MOVING:
 			if (this->frame_count >= 5) {
-
-			}else {
-				
+				this->state = MOVING;
 			}
 		break;
 		case MOVING:
+			this->pos.x += this->sentido * WORM_MOVEMENT_FACTOR;
+			this->correct_range();
 		break;
 		case JUMPING:
+
 		break;
 	}
 	this->frame_count++;
+}
+void Worm::correct_range() {
+	if (this->pos.x < this->physics.min_coordinates.x) {
+		this->pos.x = this->physics.min_coordinates.x;
+	}
+	if (this->pos.x > this->physics.max_coordinates.x) {
+		this->pos.x = this->physics.max_coordinates.x;
+	}
+	if (this->pos.y < this->physics.min_coordinates.y) {
+		this->pos.y = this->physics.min_coordinates.y;
+	}
+	if (this->pos.y > this->physics.max_coordinates.y) {
+		this->pos.y = this->physics.max_coordinates.y;
+	}
+}
+int Worm::get_sentido() { // 1 o -1
+	return this->sentido;
+}
+int Worm::get_state() {
+	return this->state;
+}
+Pos Worm::get_position() {
+	return this->pos;
 }
