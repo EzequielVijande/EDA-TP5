@@ -177,3 +177,7 @@ int Worm::get_if_error() {
 	return this->error;
 }
 
+int Worm::get_jump_period()
+{
+	return jump_stage_period;
+}

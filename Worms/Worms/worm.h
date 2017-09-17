@@ -55,6 +55,7 @@ class Worm {
 		Pos get_original_position();
 		int get_jump_stage_animation();
 		int get_move_stage_animation();
+		int get_jump_period();
 		int get_if_error();
 };
 

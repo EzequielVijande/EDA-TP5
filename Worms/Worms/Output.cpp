@@ -62,6 +62,7 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 	int facing = 0; //Sentido en el que mira el gusano.
 	int jump_stage = 0;
 	int walk_stage = 0;
+	int period = 0;
 	int secuence = 0; //indica en que frame de la accion se encuentra el worm
 	for (unsigned int i = 0; i < worm_count; i++)
 	{
@@ -94,11 +95,11 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 				{
 					if (facing == RIGHT)
 					{
-						graph_pos.x += 9;
+						graph_pos.x += 7;
 					}
 					else
 					{
-						graph_pos.x -= 9;
+						graph_pos.x -= 7;
 					}
 					PrintMove(worms[i], IDLE_FRAME, facing);
 				}
@@ -111,6 +112,9 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 
 		case JUMPING:
 			jump_stage = (worms + i)->get_jump_stage_animation();
+			period = (worms + i)->get_jump_period();
+			
+
 			if (jump_stage <= 0)
 			{
 				jump_stage = 1;
@@ -119,6 +123,17 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 			{
 
 				PrintJump(worms[i], jump_stage-1, facing);
+			}
+
+			jump_stage %= period;
+
+			if((jump_stage>=(period-11))&&(jump_stage<(period - 4))) //unwind del salto
+			{
+				PrintJump(worms[i], 2+12-(period-jump_stage), facing);
+			}
+			else if (jump_stage>=(period - 4))
+			{
+				PrintJump(worms[i], 8 - 4 - (period - jump_stage), facing);
 			}
 			else
 			{
