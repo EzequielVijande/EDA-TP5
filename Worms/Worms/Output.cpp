@@ -3,6 +3,7 @@
 #define IDLE_FRAME 3
 #define WARM_UP 3
 #define WALK_CYCLE 13
+#define UNWIND_FRAMES 7
 bool InitializeAllegroOutput(void);
 //Inicializa los  addons necesarios de allegro para
 //utilizar el modulo de output.
@@ -17,10 +18,11 @@ void destroy_images(ALLEGRO_BITMAP  **imagen, unsigned int num_imagenes);
 //Libera toda la memoria utilizada por las imagenes creadas.
 
 
-viewer::viewer(unsigned int width_, unsigned int height_)
+viewer::viewer(unsigned int width_, unsigned int height_, unsigned int n_worms)
 {
 	height = height_;
 	width = width_;
+	graph_pos =  new Pos[n_worms];
 	char* jump_path[J_FRAMES] = {J_F0, J_F1, J_F2, J_F3, J_F4, J_F5, J_F6, J_F7, J_F8, J_F9}; //Paths de las imagenes de jump
 	char* walk_path[W_FRAMES] = {W_F0, W_F1, W_F2, W_F3, W_F4, W_F5, W_F6, W_F7, W_F8, W_F9, W_F10, W_F11, W_F12, W_F13, W_F14}; //paths de las imagenes de walk
 
@@ -36,6 +38,7 @@ viewer:: ~viewer()
 {
 	if (init)
 	{
+		delete[] graph_pos;
 		al_destroy_bitmap(background);
 		destroy_images(worm_jump, J_FRAMES);
 		destroy_images(worm_walk, W_FRAMES);
@@ -75,18 +78,18 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 			walk_stage = (worms + i)->get_move_stage_animation();
 			if (walk_stage == 1)
 			{
-				graph_pos.x = ((worms + i)->get_position()).x;
-				graph_pos.y = ((worms + i)->get_position()).y;
+				(graph_pos[i]).x = ((worms + i)->get_position()).x;
+				(graph_pos[i]).y = ((worms + i)->get_position()).y;
 			}
 			if (walk_stage <= 0)
 			{
 				walk_stage = 1;
-				graph_pos.x = ((worms + i)->get_position()).x;
-				graph_pos.y = ((worms + i)->get_position()).y;
+				(graph_pos[i]).x = ((worms + i)->get_position()).x;
+				(graph_pos[i]).y = ((worms + i)->get_position()).y;
 			}
 			if (walk_stage <= WARM_UP)
 			{
-				PrintMove(worms[i], walk_stage-1, facing);
+				PrintMove(worms[i], walk_stage-1, facing, i);
 			}
 			else
 			{
@@ -95,17 +98,17 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 				{
 					if (facing == RIGHT)
 					{
-						graph_pos.x += 7;
+						(graph_pos[i]).x += 7;
 					}
 					else
 					{
-						graph_pos.x -= 7;
+						(graph_pos[i]).x -= 7;
 					}
-					PrintMove(worms[i], IDLE_FRAME, facing);
+					PrintMove(worms[i], IDLE_FRAME, facing, i);
 				}
 				else
 				{
-					PrintMove(worms[i], IDLE_FRAME + (walk_stage%WALK_CYCLE) - 1, facing);
+					PrintMove(worms[i], IDLE_FRAME + (walk_stage%WALK_CYCLE) - 1, facing, i);
 				}
 			}
 			break;
@@ -127,17 +130,13 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 
 			jump_stage %= period;
 
-			if((jump_stage>=(period-11))&&(jump_stage<(period - 4))) //unwind del salto
+			if((jump_stage>=(period-6))) //unwind del salto
 			{
-				PrintJump(worms[i], 2+12-(period-jump_stage), facing);
-			}
-			else if (jump_stage>=(period - 4))
-			{
-				PrintJump(worms[i], 8 - 4 - (period - jump_stage), facing);
+				PrintJump(worms[i], IDLE_FRAME + UNWIND_FRAMES -(period-jump_stage), facing);
 			}
 			else
 			{
-				PrintJump(worms[i], 2, facing);
+				PrintJump(worms[i], IDLE_FRAME, facing);
 			}
 			break;
 
@@ -254,10 +253,10 @@ ALLEGRO_BITMAP* load_image_at_size(char* image_name, int size_x, int size_y)
 	return resized_image;
 }
 
-void viewer:: PrintMove(Worm& worm, int secuence_, int sense)
+void viewer:: PrintMove(Worm& worm, int secuence_, int sense, unsigned int n_worm)
 {
-	double wormX = graph_pos.x;
-	double wormY = graph_pos.y;
+	double wormX = (graph_pos[n_worm]).x;
+	double wormY = (graph_pos [n_worm]).y;
 	int secuence = secuence_ % W_FRAMES;
 	al_set_target_backbuffer(display);
 	if (sense == RIGHT)

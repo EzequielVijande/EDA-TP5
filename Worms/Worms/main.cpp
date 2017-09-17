@@ -28,7 +28,7 @@ int main() {
 	}
 
 	//ALLEGRO_DISPLAY *display = al_create_display(SCREEN_WIDTH , SCREEN_HEIGHT);
-	viewer view(SCREEN_WIDTH, SCREEN_HEIGHT);
+	viewer view(SCREEN_WIDTH, SCREEN_HEIGHT, 1);
 	if (!(view.IsInitOK()))
 	{
 		return -1;
