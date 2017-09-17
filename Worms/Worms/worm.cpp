@@ -106,7 +106,7 @@ void Worm::update() {
 			this->move_stage = this->frame_count % this->move_stage_period;
 
 			this->correct_range();
-			if (this->state == END_MOVEMENT && this->frame_count % 50 == 0) {
+			if (((this->state) == END_MOVEMENT) && ((this->frame_count % 50) == 0)) {
 				this->state = IDLE;
 				this->move_stage = 0;
 			}
@@ -163,6 +163,10 @@ Pos Worm::get_position() {
 	return this->pos;
 }
 
+Pos  Worm:: get_original_position(){
+	return original_pos;
+}
+
 int Worm::get_jump_stage_animation() {
 	return this->jump_stage;
 }
@@ -172,3 +176,4 @@ int Worm::get_move_stage_animation() {
 int Worm::get_if_error() {
 	return this->error;
 }
+

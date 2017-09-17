@@ -52,7 +52,7 @@
 class viewer //Se ocupa de todo lo relacionado con el output de la simulacion
 {
 public:
-	viewer(unsigned int height_, unsigned int width_);
+	viewer(unsigned int width_, unsigned int height_);
 	~viewer();
 	void UpdateDisplay(Worm* worms, unsigned int worm_count); //No llama a al_flip_display()
 	bool IsInitOK(void);				//deveulve true si todos los recursos se crearon exitosamente.
@@ -62,6 +62,7 @@ private:
 
 	unsigned int height;
 	unsigned int width;
+	Pos graph_pos;
 	ALLEGRO_DISPLAY* display;
 	ALLEGRO_BITMAP* background;
 	ALLEGRO_BITMAP* worm_jump[J_FRAMES]; //guarda los bitmaps con las imagenes correspondientes al salto
@@ -70,6 +71,7 @@ private:
 	bool InitializeResources(char* image, char** worm_jumps,  char** worm_walks);
 	void PrintMove(Worm& worm, int secuence, int sense); //Actualiza la representacion del worm moviendose.
 	void PrintJump(Worm& worm, int secuence, int sense); //Actualiza la representacion del worm saltando.
+	void PrintPos(Worm& worm, int sense);
 
 };
 

@@ -1,10 +1,12 @@
 #ifndef WORM_H
 #define WORM_H
 
+#define LEFT -1
+#define RIGHT 1
 
 enum { IDLE, MONITOR_MOVING, MOVING, END_MOVEMENT, JUMPING, MONITOR_JUMPING };
 
-/// We as
+//// We as
 
 struct Pos {
 	double x, y;
@@ -50,6 +52,7 @@ class Worm {
 		int get_sentido(); // 1 o -1
 		int get_state();
 		Pos get_position();
+		Pos get_original_position();
 		int get_jump_stage_animation();
 		int get_move_stage_animation();
 		int get_if_error();

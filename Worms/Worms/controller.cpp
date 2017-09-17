@@ -81,5 +81,6 @@ Cevent& controller::getNextEvent(void)
 
 controller::~controller()
 {
-
+	al_destroy_timer(timer);
+	al_destroy_event_queue(cola);
 }

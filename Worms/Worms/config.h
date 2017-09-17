@@ -1,6 +1,6 @@
 #ifndef CONFIG_H
-#define CONFIG_h
+#define CONFIG_H
 
 const float WORM_MOVEMENT_FACTOR = 0.54; // to make 27 px per second
 
-#define CONFIG_H
+#endif // CONFIG_H
