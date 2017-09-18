@@ -17,6 +17,7 @@
 
 //Imagen de fondo
 #define BACKGROUND_PATH "../Images/Scenario.png"
+#define LANDSCAPE_PATH "../Images/AshLake.png"
 
 //Imagenes del worm walk
 #define W_F0 "../Images/wwalking/wwalk-F1.png"
@@ -65,10 +66,11 @@ private:
 	Pos* graph_pos;
 	ALLEGRO_DISPLAY* display;
 	ALLEGRO_BITMAP* background;
+	ALLEGRO_BITMAP* landscape;
 	ALLEGRO_BITMAP* worm_jump[J_FRAMES]; //guarda los bitmaps con las imagenes correspondientes al salto
 	ALLEGRO_BITMAP* worm_walk[W_FRAMES]; //guarda los bitmaps con las imagenes correspondientes al desplazamiento en tierra.
 	bool init; //indica si hubo o no error en la inicializacion.
-	bool InitializeResources(char* image, char** worm_jumps,  char** worm_walks);
+	bool InitializeResources(char** worm_jumps,  char** worm_walks);
 	void PrintMove(Worm& worm, int secuence, int sense, unsigned int n_worm); //Actualiza la representacion del worm moviendose.
 	void PrintJump(Worm& worm, int secuence, int sense); //Actualiza la representacion del worm saltando.
 	void PrintPos(Worm& worm, int sense);

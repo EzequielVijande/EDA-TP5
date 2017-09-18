@@ -29,7 +29,7 @@ viewer::viewer(unsigned int width_, unsigned int height_, unsigned int n_worms)
 	init = InitializeAllegroOutput();
 	if (init)
 	{
-		init = InitializeResources(BACKGROUND_PATH, jump_path, walk_path);
+		init = InitializeResources(jump_path, walk_path);
 	}
 
 }
@@ -40,6 +40,7 @@ viewer:: ~viewer()
 	{
 		delete[] graph_pos;
 		al_destroy_bitmap(background);
+		al_destroy_bitmap(landscape);
 		destroy_images(worm_jump, J_FRAMES);
 		destroy_images(worm_walk, W_FRAMES);
 		al_destroy_display(display);
@@ -58,6 +59,7 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 
 	al_set_target_backbuffer(display); 
 	al_clear_to_color(al_color_name("black"));
+	al_draw_bitmap(landscape,0,0,0);
 	al_draw_bitmap(background, 0, 0, 0);
 	
 	//al_flip_display();
@@ -168,7 +170,7 @@ ALLEGRO_DISPLAY* viewer::GetDisplay(void)
 	return display;
 }
 
-bool viewer::InitializeResources(char* b_image, char** worm_jumps, char** worm_walks)
+bool viewer::InitializeResources(char** worm_jumps, char** worm_walks)
 {
 	display = al_create_display(width*(UNIT), height*(UNIT));
 	if (display == NULL)
@@ -177,8 +179,16 @@ bool viewer::InitializeResources(char* b_image, char** worm_jumps, char** worm_w
 	}
 
 
-	background = load_image_at_size(b_image, width*(UNIT), height*(UNIT)); //crea el bitmap con el background
+	background = load_image_at_size(BACKGROUND_PATH, width*(UNIT), height*(UNIT)); //crea el bitmap con el background
 	if (background == nullptr)
+	{
+		al_destroy_display(display);
+		al_destroy_bitmap(background);
+		return false;
+	}
+
+	landscape = load_image_at_size(LANDSCAPE_PATH, width*(UNIT), height*(UNIT));
+	if (landscape == nullptr)
 	{
 		al_destroy_display(display);
 		return false;
@@ -190,6 +200,7 @@ bool viewer::InitializeResources(char* b_image, char** worm_jumps, char** worm_w
 		{
 			al_destroy_display(display);
 			al_destroy_bitmap(background);
+			al_destroy_bitmap(landscape);
 			destroy_images(worm_walk, i);
 			return false;
 		}
@@ -202,6 +213,7 @@ bool viewer::InitializeResources(char* b_image, char** worm_jumps, char** worm_w
 		{
 			al_destroy_display(display);
 			al_destroy_bitmap(background);
+			al_destroy_bitmap(landscape);
 			destroy_images(worm_walk, W_FRAMES);
 			destroy_images(worm_jump, i);
 			return false;
