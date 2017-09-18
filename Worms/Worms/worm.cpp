@@ -15,7 +15,7 @@ float degsin(float angle) {
 	return (float)sin(angle * acos(0) * 2.0 / 180.0);
 }
 
-Worm::Worm(double _x, double _y, int _sentido,Physics physics , int move_stage_period) {
+Worm::Worm(Physics physics, char * validKeys_, double _x, double _y, int _sentido , int move_stage_period) {
 	frame_count = 0;
 	this->pos.x = _x;
 	this->pos.y = _y;
@@ -24,45 +24,73 @@ Worm::Worm(double _x, double _y, int _sentido,Physics physics , int move_stage_p
 	this->physics = physics;
 	this->error = 0;
 	this->move_stage_period = move_stage_period;
+	this->validKeys = validKeys_;
 }
 
-void Worm::start_moving(int sentido) {
-	if (sentido != -1 && sentido != 1) {
+void Worm::start_moving(char key_) {
+
+	/*if (sentido != -1 && sentido != 1) {
 		this->error = 1; // this makes no sense
 		return; 
+	}*/
+	bool isKeyValid = false;
+	if (validKeys[0] == key_)
+	{
+		this->sentido = -1;    //tecla de izquierda.   //-1 es izquierda y 1 es derecha.
+		isKeyValid = true;
 	}
-	
-	if (this->state == IDLE) {
-		this->state = MONITOR_MOVING;
-		this->sentido = sentido;
-		this->frame_count = 0;
-	}else if (this->state == END_MOVEMENT) {
-		this->state = MOVING;
+	if (validKeys[1] == key_)
+	{
+		this->sentido = 1;     //tecla de derecha.
+		isKeyValid = true;
 	}
-}
-void Worm::stop_moving() {
-	if (this->state == MOVING) {
+	if (isKeyValid)
+	{
+		if (this->state == IDLE) {
+			this->state = MONITOR_MOVING;
 
-		this->state = END_MOVEMENT;
-	}else if (this->state == MONITOR_MOVING) {
-		this->state = IDLE;
+			this->frame_count = 0;
+		}
+		else if (this->state == END_MOVEMENT) {
+			this->state = MOVING;
+		}
 	}
 }
-void Worm::start_jumping() {
+void Worm::stop_moving(char key_) {
+	if (validKeys[0] == key_ || validKeys[1] == key_)
+	{
+		if (this->state == MOVING) {
+
+			this->state = END_MOVEMENT;
+		}
+		else if (this->state == MONITOR_MOVING) {
+			this->state = IDLE;
+		}
+	}
 	
-	if (this->state == IDLE) {
-		//cout << "jumping called \n";
-		this->state = MONITOR_JUMPING;
-		this->frame_count = 0;
-		this->update_jump_period();
+}
+void Worm::start_jumping(char key_) {
+	if (validKeys[2] == key_)
+	{
+		if (this->state == IDLE) {
+			//cout << "jumping called \n";
+			this->state = MONITOR_JUMPING;
+			this->frame_count = 0;
+			this->update_jump_period();
+		}
 	}
 }
-void Worm::stop_jumping() {
-	if (this->state == MONITOR_JUMPING) {
-		this->state = IDLE;
-	}else {
-		this->error = 1;
+void Worm::stop_jumping(char key_) {
+	if (validKeys[2] == key_)
+	{
+		if (this->state == MONITOR_JUMPING) {
+			this->state = IDLE;
+		}
+		else {
+			this->error = 1;
+		}
 	}
+	
 }
 
 void Worm::update_jump_period() {
@@ -180,4 +208,13 @@ int Worm::get_if_error() {
 int Worm::get_jump_period()
 {
 	return jump_stage_period;
+}
+void Worm::set_keys(char * keys_)
+{
+	validKeys = keys_;
+}
+
+void Worm :: set_physics(Physics physics_)
+{
+	physics = physics_;
 }

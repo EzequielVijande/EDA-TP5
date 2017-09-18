@@ -58,6 +58,7 @@ public:
 	void UpdateDisplay(Worm* worms, unsigned int worm_count); //No llama a al_flip_display()
 	bool IsInitOK(void);				//deveulve true si todos los recursos se crearon exitosamente.
 	ALLEGRO_DISPLAY* GetDisplay(void);
+	void flipViewer(void); //hace flip display.
 
 private:
 
@@ -70,7 +71,7 @@ private:
 	ALLEGRO_BITMAP* worm_jump[J_FRAMES]; //guarda los bitmaps con las imagenes correspondientes al salto
 	ALLEGRO_BITMAP* worm_walk[W_FRAMES]; //guarda los bitmaps con las imagenes correspondientes al desplazamiento en tierra.
 	bool init; //indica si hubo o no error en la inicializacion.
-	bool InitializeResources(char** worm_jumps,  char** worm_walks);
+	bool InitializeResources(char** worm_jumps, char** worm_walks);
 	void PrintMove(Worm& worm, int secuence, int sense, unsigned int n_worm); //Actualiza la representacion del worm moviendose.
 	void PrintJump(Worm& worm, int secuence, int sense); //Actualiza la representacion del worm saltando.
 	void PrintPos(Worm& worm, int sense);

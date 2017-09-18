@@ -11,7 +11,7 @@ typedef char userData;
 class Cevent
 {
 public:
-	Cevent(eventType type_ = 0, userData ud_ = '\0');
+	Cevent(eventType type_ = NO_EVENT, userData ud_ = '\0');
 	~Cevent();
 	void setEvent(char ev, int modo);
 	void setValidData(char evw1[EVENTOS_PER_WORM], char evw2[EVENTOS_PER_WORM]);

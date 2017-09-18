@@ -6,12 +6,12 @@
 //modos de los eventos
 #define PRESS 1
 #define LEAVE 2
-enum EVENTOS { EXIT = 0, HELP, REFRESH, LEAVE_MOVEMENT, TOUCHED_MOVEMENT, LEAVE_JUMP, TOUCHED_JUMP, NO_EVENT };
+enum EVENTOS { EXIT = 1, HELP, REFRESH, LEAVE_MOVEMENT, TOUCHED_MOVEMENT, LEAVE_JUMP, TOUCHED_JUMP, NO_EVENT };
 
 //caracteres especiales para representar eventos
 
-#define LEFT '1'
-#define RIGHT '2'
+#define IZQ '1'
+#define DER '2'
 #define UP '3'
 
 #endif // EVENTOS_H_!

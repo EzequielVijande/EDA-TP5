@@ -22,9 +22,9 @@ viewer::viewer(unsigned int width_, unsigned int height_, unsigned int n_worms)
 {
 	height = height_;
 	width = width_;
-	graph_pos =  new Pos[n_worms];
-	char* jump_path[J_FRAMES] = {J_F0, J_F1, J_F2, J_F3, J_F4, J_F5, J_F6, J_F7, J_F8, J_F9}; //Paths de las imagenes de jump
-	char* walk_path[W_FRAMES] = {W_F0, W_F1, W_F2, W_F3, W_F4, W_F5, W_F6, W_F7, W_F8, W_F9, W_F10, W_F11, W_F12, W_F13, W_F14}; //paths de las imagenes de walk
+	graph_pos = new Pos[n_worms];
+	char* jump_path[J_FRAMES] = { J_F0, J_F1, J_F2, J_F3, J_F4, J_F5, J_F6, J_F7, J_F8, J_F9 }; //Paths de las imagenes de jump
+	char* walk_path[W_FRAMES] = { W_F0, W_F1, W_F2, W_F3, W_F4, W_F5, W_F6, W_F7, W_F8, W_F9, W_F10, W_F11, W_F12, W_F13, W_F14 }; //paths de las imagenes de walk
 
 	init = InitializeAllegroOutput();
 	if (init)
@@ -44,7 +44,7 @@ viewer:: ~viewer()
 		destroy_images(worm_jump, J_FRAMES);
 		destroy_images(worm_walk, W_FRAMES);
 		al_destroy_display(display);
-		
+
 	}
 }
 
@@ -57,13 +57,13 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 {
 	ALLEGRO_BITMAP* current_target = al_get_target_bitmap(); //guarda el target actual para no perderlo.
 
-	al_set_target_backbuffer(display); 
+	al_set_target_backbuffer(display);
 	al_clear_to_color(al_color_name("black"));
-	al_draw_bitmap(landscape,0,0,0);
+	al_draw_bitmap(landscape, 0, 0, 0);
 	al_draw_bitmap(background, 0, 0, 0);
-	
+
 	//al_flip_display();
-	int state = 0; 
+	int state = 0;
 	int facing = 0; //Sentido en el que mira el gusano.
 	int jump_stage = 0;
 	int walk_stage = 0;
@@ -71,7 +71,7 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 	int secuence = 0; //indica en que frame de la accion se encuentra el worm
 	for (unsigned int i = 0; i < worm_count; i++)
 	{
-		state = ((worms+i)->get_state());
+		state = ((worms + i)->get_state());
 		facing = ((worms + i)->get_sentido());
 		switch (state)
 		{
@@ -91,7 +91,7 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 			}
 			if (walk_stage <= WARM_UP)
 			{
-				PrintMove(worms[i], walk_stage-1, facing, i);
+				PrintMove(worms[i], walk_stage - 1, facing, i);
 			}
 			else
 			{
@@ -118,7 +118,7 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 		case JUMPING:
 			jump_stage = (worms + i)->get_jump_stage_animation();
 			period = (worms + i)->get_jump_period();
-			
+
 
 			if (jump_stage <= 0)
 			{
@@ -127,14 +127,14 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 			if (jump_stage <= WARM_UP)
 			{
 
-				PrintJump(worms[i], jump_stage-1, facing);
+				PrintJump(worms[i], jump_stage - 1, facing);
 			}
 
 			jump_stage %= period;
 
-			if((jump_stage>=(period-6))) //unwind del salto
+			if ((jump_stage >= (period - 6))) //unwind del salto
 			{
-				PrintJump(worms[i], IDLE_FRAME + UNWIND_FRAMES -(period-jump_stage), facing);
+				PrintJump(worms[i], IDLE_FRAME + UNWIND_FRAMES - (period - jump_stage), facing);
 			}
 			else
 			{
@@ -162,7 +162,7 @@ bool InitializeAllegroOutput(void)
 	{
 		return false;
 	}
-	
+
 	return true;
 }
 ALLEGRO_DISPLAY* viewer::GetDisplay(void)
@@ -265,10 +265,10 @@ ALLEGRO_BITMAP* load_image_at_size(char* image_name, int size_x, int size_y)
 	return resized_image;
 }
 
-void viewer:: PrintMove(Worm& worm, int secuence_, int sense, unsigned int n_worm)
+void viewer::PrintMove(Worm& worm, int secuence_, int sense, unsigned int n_worm)
 {
 	double wormX = (graph_pos[n_worm]).x;
-	double wormY = (graph_pos [n_worm]).y;
+	double wormY = (graph_pos[n_worm]).y;
 	int secuence = secuence_ % W_FRAMES;
 	al_set_target_backbuffer(display);
 	if (sense == RIGHT)
@@ -281,7 +281,7 @@ void viewer:: PrintMove(Worm& worm, int secuence_, int sense, unsigned int n_wor
 	}
 }
 
-void viewer:: PrintJump(Worm& worm, int secuence_, int sense)
+void viewer::PrintJump(Worm& worm, int secuence_, int sense)
 {
 	al_set_target_backbuffer(display);
 	double wormX = ((worm.get_position()).x);
@@ -297,7 +297,7 @@ void viewer:: PrintJump(Worm& worm, int secuence_, int sense)
 	}
 }
 
-void viewer:: PrintPos(Worm& worm, int sense)
+void viewer::PrintPos(Worm& worm, int sense)
 {
 	double wormX = (worm.get_position()).x;
 	double wormY = (worm.get_position()).y;
@@ -310,4 +310,8 @@ void viewer:: PrintPos(Worm& worm, int sense)
 	{
 		al_draw_bitmap(worm_walk[IDLE_FRAME], wormX, wormY, 0);
 	}
+}
+void viewer::flipViewer(void)
+{
+	al_flip_display();
 }
