@@ -19,8 +19,8 @@
 
 using namespace std;
 
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+const int SCREEN_WIDTH = 1920;
+const int SCREEN_HEIGHT = 696;
 
 void dispatch(Cevent& ev, Worm * Worms, int n_worms, viewer& view);
 
@@ -35,9 +35,9 @@ int main(void)
 	physics.jump_angle = 60;
 	physics.jump_speed = 2.4 * 50;
 	physics.speed = 27;
-	physics.max_coordinates.x = 800;
-	physics.max_coordinates.y = 600;
-	physics.min_coordinates.x = 0;
+	physics.max_coordinates.x = 1212;
+	physics.max_coordinates.y = 800;
+	physics.min_coordinates.x = 701;
 	physics.min_coordinates.y = 0;
 	physics.TIME_PER_UPDATE = (1.0 / FPS);
 

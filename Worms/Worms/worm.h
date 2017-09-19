@@ -52,7 +52,7 @@ class Worm {
 
 		//ESTO SERIA LO PUBLIC
 public:
-	Worm(Physics physics = { 0 }, char * validKeys_ = NULL, double _x = 300, double _y = 400, int _sentido = RIGHT, int move_stage_period = 50);
+	Worm(Physics physics = { 0 }, char * validKeys_ = NULL, double _x = 850, double _y = 616, int _sentido = RIGHT, int move_stage_period = 50);
 
 		void start_moving(char key_);
 		void stop_moving(char key_);

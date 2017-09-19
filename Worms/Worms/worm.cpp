@@ -36,7 +36,7 @@ void Worm::start_moving(char key_) {
 	bool isKeyValid = false;
 	if (validKeys[0] == key_)
 	{
-		if (((this->state) != END_MOVEMENT) && ((this->state) != MOVING)) //si se mueve no permite cambiar el sentido
+		if (((this->state) != END_MOVEMENT) && ((this->state) != MOVING) && ((this->state) != JUMPING)) //si se mueve no permite cambiar el sentido
 		{
 			this->sentido = -1;    //tecla de izquierda.   //-1 es izquierda y 1 es derecha.
 			isKeyValid = true;
@@ -44,7 +44,7 @@ void Worm::start_moving(char key_) {
 	}
 	if (validKeys[1] == key_)
 	{
-		if (((this->state) != END_MOVEMENT) && ((this->state) != MOVING)) //si se mueve no permite cambiar el sentido
+		if (((this->state) != END_MOVEMENT) && ((this->state) != MOVING) && ((this->state) != JUMPING)) //si se mueve no permite cambiar el sentido
 		{
 			this->sentido = 1;     //tecla de derecha.
 			isKeyValid = true;
