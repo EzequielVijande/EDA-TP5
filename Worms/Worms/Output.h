@@ -8,12 +8,18 @@
 #include <allegro5\allegro_font.h>
 #include <allegro5\allegro_ttf.h>
 #include <allegro5\allegro_color.h>
+#include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_audio.h>
 #include "worm.h"
 
 #define WORM_SIZE 40
 #define UNIT 1
 #define J_FRAMES 10
 #define W_FRAMES 15
+//Constantes de Audio
+#define NUMBER_OF_SAMPLES 1
+#define MUSIC_PATH "../Music/Get_Ready_For_This_8-bit_.flac"
+#define VOLUME 1
 
 //Imagen de fondo
 #define BACKGROUND_PATH "../Images/Scenario.png"
@@ -65,6 +71,7 @@ private:
 	unsigned int height;
 	unsigned int width;
 	Pos* graph_pos;
+	ALLEGRO_SAMPLE* music;
 	ALLEGRO_DISPLAY* display;
 	ALLEGRO_BITMAP* background;
 	ALLEGRO_BITMAP* landscape;
@@ -72,6 +79,7 @@ private:
 	ALLEGRO_BITMAP* worm_walk[W_FRAMES]; //guarda los bitmaps con las imagenes correspondientes al desplazamiento en tierra.
 	bool init; //indica si hubo o no error en la inicializacion.
 	bool InitializeResources(char** worm_jumps, char** worm_walks);
+	bool LoadSong(char*, int);
 	void PrintMove(Worm& worm, int secuence, int sense, unsigned int n_worm); //Actualiza la representacion del worm moviendose.
 	void PrintJump(Worm& worm, int secuence, int sense); //Actualiza la representacion del worm saltando.
 	void PrintPos(Worm& worm, int sense);

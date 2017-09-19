@@ -137,7 +137,7 @@ void Worm::update() {
 			t = this->frame_count * this->physics.TIME_PER_UPDATE;
 
 			this->pos.x = this->original_pos.x + this->sentido * this->physics.speed * t;
-			this->move_stage = this->frame_count % this->move_stage_period;
+			this->move_stage = (this->frame_count) % (this->move_stage_period);
 
 			this->correct_range();
 			if (((this->state) == END_MOVEMENT) && ((this->frame_count % 50) == 0)) {

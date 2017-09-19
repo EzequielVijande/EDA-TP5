@@ -10,6 +10,12 @@ bool InitializeAllegroOutput(void);
 
 
 
+void destruir_canciones(ALLEGRO_SAMPLE**, int);
+//Funcion que libera el espacio de todas la canciones cargadas.
+//recibe un puntero al arreglo de dichas canciones y el numero de las mismas.
+
+
+
 ALLEGRO_BITMAP * load_image_at_size(char* image_name, int size_x, int size_y);
 //Devuelve el bitmap de la imagen cargada en el tamano deseado.
 //En caso de error devuelve NULL.
@@ -39,10 +45,12 @@ viewer:: ~viewer()
 	if (init)
 	{
 		delete[] graph_pos;
+		al_stop_samples();
 		al_destroy_bitmap(background);
 		al_destroy_bitmap(landscape);
 		destroy_images(worm_jump, J_FRAMES);
 		destroy_images(worm_walk, W_FRAMES);
+		destruir_canciones(&music, NUMBER_OF_SAMPLES);
 		al_destroy_display(display);
 
 	}
@@ -79,6 +87,7 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 		case END_MOVEMENT:
 			walk_stage = (worms + i)->get_move_stage_animation();
 			walk_stage %=50;
+
 			if (walk_stage == 1)
 			{
 				(graph_pos[i]).x = ((worms + i)->get_position()).x;
@@ -165,6 +174,18 @@ bool InitializeAllegroOutput(void)
 	{
 		return false;
 	}
+	if (!al_install_audio())
+	{
+		return false;
+	}
+	if (!al_init_acodec_addon())
+	{
+		return false;
+	}
+	if (!al_reserve_samples(NUMBER_OF_SAMPLES))
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -175,9 +196,18 @@ ALLEGRO_DISPLAY* viewer::GetDisplay(void)
 
 bool viewer::InitializeResources(char** worm_jumps, char** worm_walks)
 {
+	
+		if (!LoadSong(MUSIC_PATH, NUMBER_OF_SAMPLES))
+		{
+			return false;
+		}
+
 	display = al_create_display(width*(UNIT), height*(UNIT));
+	al_play_sample(music, VOLUME, 0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
 	if (display == NULL)
 	{
+		al_stop_samples();
+		destruir_canciones(&music, NUMBER_OF_SAMPLES);
 		return false;
 	}
 
@@ -185,15 +215,19 @@ bool viewer::InitializeResources(char** worm_jumps, char** worm_walks)
 	background = load_image_at_size(BACKGROUND_PATH, width*(UNIT), height*(UNIT)); //crea el bitmap con el background
 	if (background == nullptr)
 	{
+		al_stop_samples();
+		destruir_canciones(&music, NUMBER_OF_SAMPLES);
 		al_destroy_display(display);
-		al_destroy_bitmap(background);
 		return false;
 	}
 
 	landscape = load_image_at_size(LANDSCAPE_PATH, width*(UNIT), height*(UNIT));
 	if (landscape == nullptr)
 	{
+		al_stop_samples();
+		destruir_canciones(&music, NUMBER_OF_SAMPLES);
 		al_destroy_display(display);
+		al_destroy_bitmap(background);
 		return false;
 	}
 	for (unsigned int i = 0; i < W_FRAMES; i++) //Crea los bitmaps con los frames del worm walk.
@@ -201,6 +235,8 @@ bool viewer::InitializeResources(char** worm_jumps, char** worm_walks)
 		worm_walk[i] = load_image_at_size(worm_walks[i], WORM_SIZE, WORM_SIZE);
 		if ((worm_walk[i]) == nullptr)
 		{
+			al_stop_samples();
+			destruir_canciones(&music, NUMBER_OF_SAMPLES);
 			al_destroy_display(display);
 			al_destroy_bitmap(background);
 			al_destroy_bitmap(landscape);
@@ -214,6 +250,8 @@ bool viewer::InitializeResources(char** worm_jumps, char** worm_walks)
 		worm_jump[i] = load_image_at_size(worm_jumps[i], WORM_SIZE, WORM_SIZE);
 		if ((worm_jump[i]) == nullptr)
 		{
+			al_stop_samples();
+			destruir_canciones(&music, NUMBER_OF_SAMPLES);
 			al_destroy_display(display);
 			al_destroy_bitmap(background);
 			al_destroy_bitmap(landscape);
@@ -266,6 +304,35 @@ ALLEGRO_BITMAP* load_image_at_size(char* image_name, int size_x, int size_y)
 	al_set_target_bitmap(current_target); //vuelve al target original
 	al_destroy_bitmap(image);
 	return resized_image;
+}
+bool viewer:: LoadSong( char * nombre, int numero_de_canciones)
+{
+	int i;
+	int valido = true;
+	for (i = 0; (i<numero_de_canciones) && (valido); i++)
+	{
+		music = al_load_sample(nombre);
+		if (music == NULL)
+		{
+			valido = false;
+		}
+
+	}
+
+	return valido;
+
+
+
+}
+
+void destruir_canciones(ALLEGRO_SAMPLE** canciones, int numero_de_canciones)
+{
+	int i;
+	for (i = 0; i< numero_de_canciones; i++)
+	{
+		al_destroy_sample(canciones[i]);
+	}
+
 }
 
 void viewer::PrintMove(Worm& worm, int secuence_, int sense, unsigned int n_worm)
