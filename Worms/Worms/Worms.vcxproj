@@ -124,6 +124,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Cevent.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="controller.h" />
     <ClInclude Include="Output.h" />
     <ClInclude Include="worm.h" />
   </ItemGroup>
@@ -131,6 +134,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Cevent.cpp" />
+    <ClCompile Include="controller.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Output.cpp" />
     <ClCompile Include="worm.cpp" />

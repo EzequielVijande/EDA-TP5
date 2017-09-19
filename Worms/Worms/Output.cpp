@@ -78,11 +78,13 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 		case MOVING:
 		case END_MOVEMENT:
 			walk_stage = (worms + i)->get_move_stage_animation();
+			walk_stage %=50;
 			if (walk_stage == 1)
 			{
 				(graph_pos[i]).x = ((worms + i)->get_position()).x;
 				(graph_pos[i]).y = ((worms + i)->get_position()).y;
 			}
+			
 			if (walk_stage <= 0)
 			{
 				walk_stage = 1;
@@ -100,13 +102,14 @@ void viewer::UpdateDisplay(Worm* worms, unsigned int worm_count)
 				{
 					if (facing == RIGHT)
 					{
-						(graph_pos[i]).x += 7;
+						(graph_pos[i]).x += 3.4;
 					}
 					else
 					{
-						(graph_pos[i]).x -= 7;
+						(graph_pos[i]).x -= 3.4;
 					}
-					PrintMove(worms[i], IDLE_FRAME, facing, i);
+
+						PrintMove(worms[i], IDLE_FRAME, facing, i);
 				}
 				else
 				{

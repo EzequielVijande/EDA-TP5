@@ -36,13 +36,19 @@ void Worm::start_moving(char key_) {
 	bool isKeyValid = false;
 	if (validKeys[0] == key_)
 	{
-		this->sentido = -1;    //tecla de izquierda.   //-1 es izquierda y 1 es derecha.
-		isKeyValid = true;
+		if (((this->state) != END_MOVEMENT) && ((this->state) != MOVING)) //si se mueve no permite cambiar el sentido
+		{
+			this->sentido = -1;    //tecla de izquierda.   //-1 es izquierda y 1 es derecha.
+			isKeyValid = true;
+		}
 	}
 	if (validKeys[1] == key_)
 	{
-		this->sentido = 1;     //tecla de derecha.
-		isKeyValid = true;
+		if (((this->state) != END_MOVEMENT) && ((this->state) != MOVING)) //si se mueve no permite cambiar el sentido
+		{
+			this->sentido = 1;     //tecla de derecha.
+			isKeyValid = true;
+		}
 	}
 	if (isKeyValid)
 	{
@@ -165,7 +171,7 @@ void Worm::update() {
 			}
 		break;
 	}
-	this->frame_count++;
+	(this->frame_count)++;
 }
 void Worm::correct_range() {
 	if (this->pos.x < this->physics.min_coordinates.x) {
