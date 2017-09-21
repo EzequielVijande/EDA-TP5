@@ -50,7 +50,6 @@ int main(void)
 	worms[0].set_keys(keysEvWorm1);
 	worms[1].set_keys(keysEvWorm2);
 	worms[0].set_physics(physics);
-	physics.jump_angle = 30;  //al segundo worm le ponemos otro angulo de salto
 	worms[1].set_physics(physics);
 	cout << (worms[0].get_position().x) << endl;
 	cout << (worms[0].get_move_stage_animation()) << endl;
